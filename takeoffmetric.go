@@ -16,15 +16,18 @@ var constantsCSV string
 
 // Constant is one row of the constants table. Value and ValueSI are the
 // numbers of the row; ValueText keeps the value as the source prints it.
+//
+// When Withheld is true the publisher does not allow republication: Value and
+// ValueSI are nil, ValueText is empty, and the value is read at Source.URL.
 type Constant struct {
 	ID             string    // stable row id, for example "CON-001"
 	Category       string    // concrete, rebar, aggregates, earthwork, ...
 	MaterialOrItem string    // the product or material the value is for
 	Quantity       string    // what the value measures
-	Value          float64   // the value in US customary units
+	Value          *float64  // the value in US customary units; nil when Withheld
 	ValueText      string    // Value exactly as written in the table
 	Unit           string    // unit of Value
-	ValueSI        *float64  // SI conversion of Value; nil when the table leaves it empty
+	ValueSI        *float64  // SI conversion of Value; nil when Withheld or when the table leaves it empty
 	UnitSI         string    // unit of ValueSI
 	Condition      string    // the condition the value applies to (loose, bank, compacted, ...)
 	Source         Source    // the publication the value was read in
@@ -33,6 +36,8 @@ type Constant struct {
 	EngineFile     []string  // site source files holding the value (not part of this module)
 	EngineSymbol   []string  // symbols in those files, one per EngineFile entry
 	Notes          string
+	Withheld       bool     // true when the publisher does not allow republication of the value
+	WithheldHosts  []string // domains of the publishers concerned, set only when Withheld
 }
 
 // Source is the publication a constant was read in.
@@ -69,12 +74,31 @@ func load() {
 }
 
 func parse(r []string) (Constant, error) {
-	if len(r) != 18 {
-		return Constant{}, fmt.Errorf("%d fields, want 18", len(r))
+	if len(r) != 20 {
+		return Constant{}, fmt.Errorf("%d fields, want 20", len(r))
 	}
-	v, err := strconv.ParseFloat(r[4], 64)
-	if err != nil {
-		return Constant{}, fmt.Errorf("value: %w", err)
+	var withheld bool
+	switch r[18] {
+	case "true":
+		withheld = true
+		// A withheld row must carry no number at all.
+		if r[4] != "" || r[6] != "" {
+			return Constant{}, fmt.Errorf("withheld row has a value")
+		}
+	case "false":
+		if r[19] != "" {
+			return Constant{}, fmt.Errorf("withheld_hosts set on a row that is not withheld")
+		}
+	default:
+		return Constant{}, fmt.Errorf("values_withheld: %q, want true or false", r[18])
+	}
+	var v *float64
+	if !withheld {
+		x, err := strconv.ParseFloat(r[4], 64)
+		if err != nil {
+			return Constant{}, fmt.Errorf("value: %w", err)
+		}
+		v = &x
 	}
 	var si *float64
 	if r[6] != "" {
@@ -94,7 +118,7 @@ func parse(r []string) (Constant, error) {
 		Source:        Source{Publisher: r[9], Title: r[10], URL: r[11], Type: r[12]},
 		DateOpened:    d,
 		UsedByToolURL: split(r[14]), EngineFile: split(r[15]), EngineSymbol: split(r[16]),
-		Notes: r[17],
+		Notes: r[17], Withheld: withheld, WithheldHosts: splitHosts(r[19]),
 	}, nil
 }
 
@@ -103,6 +127,13 @@ func split(s string) []string {
 		return nil
 	}
 	return strings.Split(s, "; ")
+}
+
+func splitHosts(s string) []string {
+	if s == "" {
+		return nil
+	}
+	return strings.Split(s, ";")
 }
 
 func table() []Constant {
@@ -178,8 +209,9 @@ func Sources() []Source {
 	return out
 }
 
-// CSV returns the embedded table as published (UTF-8, comma-separated),
-// licensed CC BY 4.0.
+// CSV returns the embedded table as published (UTF-8, comma-separated).
+// Withheld rows carry no value in it either. See [Constant] and data/LICENSE
+// for the licence of each part.
 func CSV() string {
 	return constantsCSV
 }

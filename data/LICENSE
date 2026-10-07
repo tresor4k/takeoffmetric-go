@@ -1,12 +1,21 @@
-The data in this directory (constants.csv) is licensed under the Creative Commons
-Attribution 4.0 International licence (CC BY 4.0).
-Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+constants.csv in this directory is a copy of version 1.1.0 of the dataset
+US Construction Estimating Constants. It keeps its own terms:
 
-Attribution: TakeoffMetric, US Construction Estimating Constants, 2026,
-https://takeoffmetric.com/methodology/
-Each value remains attributed to its own source through the source_publisher
-and source_url columns. Values from US federal publications are US government
-works.
+- The compilation (selection of rows, SI conversions, conditions, notes, column
+  structure) is licensed under the Creative Commons Attribution 4.0
+  International licence (CC BY 4.0), full text below and at
+  https://creativecommons.org/licenses/by/4.0/legalcode
+- Values from federal publications are works of the US government and in the
+  public domain.
+- Any other value stays under the terms of its publisher. It is not relicensed
+  by CC BY 4.0; each row names its publisher and links its source
+  (source_publisher, source_title, source_url).
+- 55 rows carry no value (values_withheld = true): their publishers do not allow
+  republication. Those rows keep the name of the quantity, its unit and the link
+  to the source; withheld_hosts lists the domains concerned.
+
+Cite as: TakeoffMetric Editorial, US Construction Estimating Constants,
+version 1.1.0, 2026, takeoffmetric.com.
 
 Attribution 4.0 International
 
