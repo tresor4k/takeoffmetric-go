@@ -1,6 +1,6 @@
 # takeoffmetric-go
 
-Dependency-free Go package that embeds version 1.1.1 of the US construction estimating constants published by
+Dependency-free Go package that embeds version 1.2.0 of the US construction estimating constants published by
 [TakeoffMetric](https://takeoffmetric.com/) as typed, read-only records: bag yields, aggregate and soil densities,
 swell and compaction ratios, rebar weights, dressed lumber sizes, block counts, shingle coverage, asphalt unit weights
 and air properties. These are published constants with their sources, not original research: each record gives the
@@ -41,5 +41,5 @@ file given as first argument) into `data/`. It accepts only the 1.1.x header (wi
   - any other value stays under the terms of its publisher and is not relicensed by CC BY 4.0; each row names its
     publisher and links its source (`source_publisher`, `source_title`, `source_url`);
   - 55 rows carry no value (`values_withheld` = `true`): their publishers do not allow republication.
-- Cite as: TakeoffMetric Editorial, *US Construction Estimating Constants*, version 1.1.1, 2026, takeoffmetric.com.
+- Cite as: TakeoffMetric Editorial, *US Construction Estimating Constants*, version 1.2.0, 2026, takeoffmetric.com.
 - The calculation engine of takeoffmetric.com is not included in this module.
