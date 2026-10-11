@@ -1,4 +1,4 @@
-// Package takeoffmetric embeds version 1.1.0 of the US construction estimating
+// Package takeoffmetric embeds version 1.1.1 of the US construction estimating
 // constants published by TakeoffMetric and exposes them as typed, read-only records. It
 // has no dependencies and makes no network calls.
 //

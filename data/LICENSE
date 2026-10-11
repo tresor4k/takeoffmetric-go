@@ -1,4 +1,4 @@
-constants.csv in this directory is a copy of version 1.1.0 of the dataset
+constants.csv in this directory is a copy of version 1.1.1 of the dataset
 US Construction Estimating Constants. It keeps its own terms:
 
 - The compilation (selection of rows, SI conversions, conditions, notes, column
@@ -15,7 +15,7 @@ US Construction Estimating Constants. It keeps its own terms:
   to the source; withheld_hosts lists the domains concerned.
 
 Cite as: TakeoffMetric Editorial, US Construction Estimating Constants,
-version 1.1.0, 2026, takeoffmetric.com.
+version 1.1.1, 2026, takeoffmetric.com.
 
 Attribution 4.0 International
 

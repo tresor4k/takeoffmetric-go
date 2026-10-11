@@ -1,8 +1,8 @@
-"""Copy the published TakeoffMetric constants CSV (dataset version 1.1.0) into data/ (embedded by the package).
+"""Copy the published TakeoffMetric constants CSV (dataset version 1.1.1) into data/ (embedded by the package).
 
 Usage: python sync_data.py [source.csv]
 Default source: ../TakeoffMetrics-open-data/us-construction-estimating-constants/constants.csv
-Only the 1.1.0 header (with values_withheld and withheld_hosts) is accepted.
+Only the 1.1.x header (values_withheld and withheld_hosts columns, introduced in 1.1.0) is accepted.
 Then run: go vet ./... && go test ./...
 """
 import csv
